@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
 const {Posts} = require('../models')
+const {validateToken} = require('../middlewares/JWT')
 
-router.get("/", async (request, response)=>{
+
+router.get("/" ,async (request, response)=>{
 
     const listOfPosts = await Posts.findAll(); // databaseden veri çektik
 
@@ -11,7 +12,7 @@ router.get("/", async (request, response)=>{
 });
 
 
-router.post("/", async (request, response) =>{
+router.post("/",validateToken, async (request, response) =>{
 
     const post = request.body;
 

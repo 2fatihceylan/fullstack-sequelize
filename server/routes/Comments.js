@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {Comments} = require('../models');
+const {validateToken} = require('../middlewares/JWT')
 
 
 
@@ -14,7 +15,7 @@ router.get("/:postId", async(request,response)=>{
 })
 
 
-router.post("/", async(request, response)=>{
+router.post("/",validateToken, async(request, response)=>{
 
     const comment = request.body;
 

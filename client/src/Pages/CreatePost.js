@@ -23,10 +23,21 @@ const CreatePost = () => {
     const onSubmit = (data) => {
         axios.post(
             'http://localhost:5000/posts',
-            data
+            data,{
+                headers: {
+                    accesstoken: sessionStorage.getItem('access-token')
+                }
+            }
         ).then((response)=>{
             navigate(`/`);
-            
+            console.log('post basarılı')
+        }).catch((err)=>{
+            if(err){
+                if(err.response.data.error==='user not authenticated'){
+                    alert('kullanıcı giriş yapmamıs');
+                    navigate('/login')
+                }
+            }
         })
     }
 

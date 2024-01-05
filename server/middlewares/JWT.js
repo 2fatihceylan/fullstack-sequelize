@@ -1,3 +1,5 @@
+
+
 const {sign, verify} = require('jsonwebtoken');
 
 
@@ -17,7 +19,8 @@ const createTokens = (user) => {
 
 const validateToken = (req, res, next) => {
 
-    const accessToken = req.cookies["access-token"];
+
+    const accessToken = req.header("accesstoken");
     
 
     if(!accessToken){

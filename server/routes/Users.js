@@ -4,7 +4,7 @@ const {Users} = require('../models');
 
 const bcrypt = require('bcrypt');
 
-const {createTokens, validateToken} = require('../JWT');
+const {createTokens, validateToken} = require('../middlewares/JWT');
 
 
 
@@ -65,12 +65,12 @@ router.post("/login", async (request, response)=>{
 
             const accessToken = createTokens(user.dataValues);
 
-            response.cookie('access-token',accessToken,{
-                maxAge: 60*60*24*30*1000,
-                httpOnly: true,
-            })
+   //         response.cookie('access-token',accessToken,{
+   //             maxAge: 60*60*24*30*1000,
+   //             httpOnly: true,        
+   //         })
 
-            response.json("you_logged_in");
+            response.json(accessToken);
 
         }
 
@@ -80,20 +80,21 @@ router.post("/login", async (request, response)=>{
 })
 
 
-router.get("/isLogin", validateToken,  (request, response)=>{
+router.post("/islogin", validateToken,  (request, response)=>{
 
     response.status(200).json("user_already_loggedin");
   
      
 } );
 
-router.get("/logout", validateToken, async (request, response)=>{
+router.post("/logout", async (request, response)=>{
+//router.get("/logout",validateToken, async (request, response)=>{  doğru olan bu
 
     const temp = {username: 'asd', id: 0}
 
     const accessToken = createTokens(temp);
 
-    response.cookie('access-token', accessToken, {
+    response.cookie('accesstoken', accessToken, {
         maxAge: 1,
         httpOnly: true,
     })

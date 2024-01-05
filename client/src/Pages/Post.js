@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Post = () =>{
     let {id} = useParams();
+
+
+    const navigate= useNavigate();
 
     const [postObject, setPostObject] = useState({});
     const [comments, setComments] = useState([]);
@@ -23,18 +27,44 @@ const Post = () =>{
 
 
 
-    const addComment = ()=>{
+    const addComment = async()=>{
 
-        axios.post('http://localhost:5000/comments', 
+        await axios.post('http://localhost:5000/comments', 
         {
             commentBody: newComment, 
             PostId: id
+        },
+        {
+            headers: {
+                accesstoken: sessionStorage.getItem('access-token')
+            }
         })
         .then((response)=>{
-            const commentToAddToList = {commentBody: newComment}
-            setComments([...comments, commentToAddToList]);
 
-            setNewComment('');
+            console.log('-----------------------------------------');
+
+            console.log(response)
+            console.log('-----------------------------------------');
+
+
+            if(response.status===200)
+            {
+                const commentToAddToList = {commentBody: newComment}
+                setComments([...comments, commentToAddToList]);
+                setNewComment('');  
+            }else{
+
+                 
+            }
+
+        }).catch((err)=>{
+            console.log('**********************')
+            console.log(err.response.data.error==='user not authenticated')
+            console.log('***********************')
+
+
+            alert('önce login olmalısın');
+            navigate('/login');
         })
     }
 
