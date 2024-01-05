@@ -22,4 +22,15 @@ router.post("/", async (request, response) =>{
 });
 
 
+router.get("/byId/:id", async (request, response)=>{
+
+    const id = request.params.id;
+
+    const post = await Posts.findByPk(id);  // id ile (primary key ile) veri çektik
+
+    response.json(post);
+
+})
+
+
 module.exports = router;
